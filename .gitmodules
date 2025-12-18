@@ -4,4 +4,4 @@
 	branch = master
 [submodule "pretixscan/libpretixui-repo"]
 	path = pretixscan/libpretixui-repo
-	url = https://github.com/pretix/libpretixui-android.git
+	url = git@github.com:awsugid/libpretixui-android.git
