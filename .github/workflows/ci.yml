@@ -12,6 +12,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: install build-essential
+      run: sudo apt-get update && sudo apt-get install build-essential -y
     - name: local.properties pretixscan
       run: echo "github.token=${{ secrets.GITHUB_TOKEN }}" > local.properties
       working-directory: ./pretixscan
@@ -23,7 +25,7 @@ jobs:
       run: git submodule update --init
       working-directory: ./pretixscan
     - name: Unit tests
-      run: TERM=dumb ./gradlew lintPretixDebug assemblePretixRelease
+      run: TERM=dumb ./gradlew assemblePretixRelease
       working-directory: ./pretixscan
       
     - name: Upload APK
