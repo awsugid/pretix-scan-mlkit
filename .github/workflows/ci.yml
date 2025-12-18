@@ -37,4 +37,3 @@ jobs:
       with:
         name: pretixscan-apk
         path: pretixscan/app/build/outputs/apk/pretix/release/*.apk
-```
