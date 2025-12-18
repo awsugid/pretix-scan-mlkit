@@ -24,8 +24,12 @@ jobs:
     - name: Submodules
       run: git submodule update --init
       working-directory: ./pretixscan
+    - name: Decode release keystore
+      run: echo "${{ secrets.RELEASE_KEYSTORE_BASE64 }}" | base64 -d > release.keystore
     - name: Unit tests
-      run: TERM=dumb ./gradlew assemblePretixRelease
+      env:
+        KSTOREPWD: ${{ secrets.KSTOREPWD }}
+      run: TERM=dumb ./gradlew lintPretixDebug assemblePretixRelease
       working-directory: ./pretixscan
       
     - name: Upload APK
@@ -33,3 +37,4 @@ jobs:
       with:
         name: pretixscan-apk
         path: pretixscan/app/build/outputs/apk/pretix/release/*.apk
+```
