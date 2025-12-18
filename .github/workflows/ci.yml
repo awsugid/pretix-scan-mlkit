@@ -3,6 +3,8 @@ name: CI
 on:
   push:
     branches: [ master ]
+    tags:
+      - 'v*'
   pull_request:
     branches: [ master ]
 
@@ -24,16 +26,41 @@ jobs:
     - name: Submodules
       run: git submodule update --init
       working-directory: ./pretixscan
+    - name: Run Linters
+      if: "!startsWith(github.ref, 'refs/tags/')"
+      run: TERM=dumb ./gradlew lintPretixDebug
+      working-directory: ./pretixscan
+
     - name: Decode release keystore
+      if: startsWith(github.ref, 'refs/tags/')
       run: echo "${{ secrets.RELEASE_KEYSTORE_BASE64 }}" | base64 -d > release.keystore
-    - name: Unit tests
+
+    - name: Build Release APK
+      if: startsWith(github.ref, 'refs/tags/')
       env:
         KSTOREPWD: ${{ secrets.KSTOREPWD }}
-      run: TERM=dumb ./gradlew lintPretixDebug assemblePretixRelease
+      run: TERM=dumb ./gradlew assemblePretixRelease
       working-directory: ./pretixscan
       
     - name: Upload APK
+      if: startsWith(github.ref, 'refs/tags/')
       uses: actions/upload-artifact@v4
       with:
         name: pretixscan-apk
         path: pretixscan/app/build/outputs/apk/pretix/release/*.apk
+
+    - name: Create Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: pretixscan/app/build/outputs/apk/pretix/release/*.apk
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Create Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: pretixscan/app/build/outputs/apk/pretix/release/*.apk
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
