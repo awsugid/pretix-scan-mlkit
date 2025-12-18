@@ -1,2 +1,3 @@
 /release.sh
 *.keystore
+release_keystore.b64
