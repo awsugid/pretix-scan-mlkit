@@ -1,7 +1,7 @@
 [submodule "pretixscan/libpretixsync-repo"]
 	path = pretixscan/libpretixsync-repo
-	url = https://github.com/pretix/libpretixsync.git
-	branch = master
+	url = git@github.com:awsugid/libpretixsync.git
+	branch = entry-strict-exit
 [submodule "pretixscan/libpretixui-repo"]
 	path = pretixscan/libpretixui-repo
 	url = https://github.com/awsugid/libpretixui-android.git
